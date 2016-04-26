@@ -12,3 +12,6 @@ In a nutshell, roles of threads:
  Intermediate work which involves applying transformation actions and glueing intermediate results - this also coordinate and carried out by worker threads as in step2
 
 Prior to Completable Future, task 3 was performed by main thread in blocking way where it has to wait and carryout intermediate results and complete delegation was not possible.
+
+Link to the workflow definition:
+https://plus.google.com/111164021249364786267/posts/43PHr2rKkt3
