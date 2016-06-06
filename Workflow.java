@@ -31,6 +31,8 @@ public class Workflow {
 			CompletableFuture<String> predictableTaskCompletable = CompletableFuture.supplyAsync(
 					() -> predictableTask(p1)
 					, workerPool);
+			// Returns a new CompletionStage that, when either this or the other given stage complete normally,
+			// is executed with the corresponding result as argument to the supplied function.
 			return fastTaskCompletable.applyToEither(predictableTaskCompletable,
 					result -> "ExtServiceEither::" + result);
 		}
@@ -117,6 +119,8 @@ public class Workflow {
 			CompletableFuture<String> task2Completable = CompletableFuture.supplyAsync(
 					() -> task2(p1)
 					, workerPool);
+			// Returns a new CompletionStage that, when this and the other given stage both complete normally,
+			// is executed with the two results as arguments to the supplied function.
 			CompletableFuture<String> finalResult = task1Completable.thenCombine(task2Completable,
 					(result1, result2) -> "ExtServiceCombine::" + result1 + "+" + result2);
 			return finalResult;
@@ -144,8 +148,10 @@ public class Workflow {
 	 * https://www.javacodegeeks.com/2013/05/java-8-completablefuture-in-action.html
 	 */
 	private static <T> CompletableFuture<List<T>> sequence(List<CompletableFuture<T>> futures) {
+		// Returns a new CompletableFuture that is completed when all of the given CompletableFutures complete.
 		CompletableFuture<Void> allDoneFuture = CompletableFuture
 				.allOf(futures.toArray(new CompletableFuture[futures.size()]));
+		// Join is non-blocking at this stage as all futures are completed and it return the value
 		return allDoneFuture
 				.thenApply(v -> futures.stream().map(future -> future.join()).collect(Collectors.<T> toList()));
 	}
